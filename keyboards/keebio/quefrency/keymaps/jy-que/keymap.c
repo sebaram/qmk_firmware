@@ -91,29 +91,19 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
   switch (keycode) {
-    // SHIFT+ESC키에 '~' 대체
     case KC_ESC:
-      // 키보드가 눌렸을 경우
        if (record->event.pressed){
-        // 왼쪽 SHIFT키와 오른쪽 SHIFT키가 눌렸는지 확인
-        if (get_mods() & MOD_BIT(KC_LSHIFT) || get_mods() & MOD_BIT(KC_RSHIFT)){
-          if(get_mods() & MOD_BIT(KC_LCTL) || get_mods() & MOD_BIT(KC_RCTL)){
-            register_code(KC_ESC);
-          }
-          else{
-            register_code(KC_GRV);
-          }
-          
-        } else {
-          // ESC만 눌린 경우 ESC키로 정의한다.
+        if (get_mods() & MOD_BIT(KC_LSHIFT)){
+          register_code(KC_ESC);          
+        } else if(get_mods() & MOD_BIT(KC_RSHIFT)){
+          register_code(KC_GRV);
+        }else {
           register_code(KC_ESC);
         }
       }
-      // 키보드가 눌리지 않았을 경우 등록된 코드를 풀어준다.
        else {
         unregister_code(KC_GRV);
         unregister_code(KC_ESC);
-
        }
       return false; // 발생한 키 처리를 했으니 false 처리를 하여 중복으로 넘겨주지 않도록 한다.
 
@@ -121,18 +111,13 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
     // SHIFT+BSPC키에 SHIFT+DEL키 대입
     case KC_BSPC:
-      // 키보드가 눌렸을 경우
        if (record->event.pressed){
-        // 왼쪽 SHIFT키와 오른쪽 SHIFT키가 눌렸는지 확인
         if (get_mods() & MOD_BIT(KC_LSHIFT) || get_mods() & MOD_BIT(KC_RSHIFT)){
-         // SHIFT+DEL을 INSERT키로 치환하는 것이기 때문에 SHIFT+INSERT가 되지 않게 SHIFT를 빼준다.
           register_code(KC_DEL);
-
         } else {
           register_code(KC_BSPC);
         }
       }
-      // 키보드가 눌리지 않았을 경우 등록된 코드를 풀어준다.
       else {
         unregister_code(KC_DEL);
         unregister_code(KC_BSPC);
@@ -144,7 +129,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
        if (record->event.pressed){
         // 왼쪽 SHIFT키와 오른쪽 SHIFT키가 눌렸는지 확인
         if (get_mods() & MOD_BIT(KC_LCTL)||get_mods() & MOD_BIT(KC_LOPT)){
-         // SHIFT+DEL을 INSERT키로 치환하는 것이기 때문에 SHIFT+INSERT가 되지 않게 SHIFT를 빼준다.
           register_code(KC_F4);
         } else {
           register_code(KC_4);
